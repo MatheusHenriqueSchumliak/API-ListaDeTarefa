@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ListaDeTarefa.Infrastructure.Migrations
 {
     [DbContext(typeof(ListaDeTarefaContexto))]
-    [Migration("20260428074929_AdicionaClasseTarefa")]
+    [Migration("20260428081843_AdicionaClasseTarefa")]
     partial class AdicionaClasseTarefa
     {
         /// <inheritdoc />

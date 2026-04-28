@@ -5,11 +5,35 @@ using ListaDeTarefa.Infrastructure.Repository;
 using ListaDeTarefa.Infrastructure.Context;
 using ListaDeTarefa.Application.Services;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 
 namespace ListaDeTarefa.Infrastructure.DependencyInjection
 {
 	public static class ServiceCollectionExtensions
 	{
+		public static IServiceCollection AddInfrastructureServices(this IServiceCollection services, IConfiguration configuration)
+		{
+			var connectionString = configuration.GetConnectionString("ListaDeTarefaConnection");
+
+			// 🔍 DIAGNÓSTICO - Adicione estas linhas
+			Console.WriteLine("=================================");
+			Console.WriteLine($"Connection String: {connectionString}");
+			Console.WriteLine("=================================");
+
+			services.AddDbContextPool<ListaDeTarefaContexto>(options =>
+				options.UseSqlServer(connectionString, sql =>
+				{
+				
+				})
+				.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking)
+			);
+
+			services.AddMemoryCache();
+			services.AddHealthChecks().AddDbContextCheck<ListaDeTarefaContexto>("ListaDeTarefa DB");
+
+			return services;
+		}
+
 		public static IServiceCollection AddProjectDependencies(this IServiceCollection services, string connectionString)
 		{
 			services.AddDbContext<ListaDeTarefaContexto>(options =>
