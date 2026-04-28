@@ -1,0 +1,17 @@
+# Build results
+bin/
+obj/
+
+# User-specific files
+*.user
+*.suo
+
+# Visual Studio files
+.vs/
+
+# Test results
+TestResults/
+
+# Others
+*.log
+*.DS_Store
