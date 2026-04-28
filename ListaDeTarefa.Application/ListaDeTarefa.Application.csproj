@@ -14,7 +14,7 @@
     <Folder Include="DTOs\Tarefa\" />
     <Folder Include="Factories\" />
     <Folder Include="DependencyInjection\" />
-    <Folder Include="Interfaces\" />
+    <Folder Include="Interfaces\IService\" />
     <Folder Include="Services\" />
     <Folder Include="Validators\Tarefa\" />
   </ItemGroup>
