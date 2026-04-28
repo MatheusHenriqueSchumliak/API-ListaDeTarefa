@@ -1,36 +1,54 @@
 
+using ListaDeTarefa.Application.DependencyInjection;
+using ListaDeTarefa.Infrastructure.DependencyInjection;
+using Microsoft.Extensions.Configuration;
+using System.Text.Json.Serialization;
+
 namespace ListaDeTarefa
 {
-    public class Program
-    {
-        public static void Main(string[] args)
-        {
-            var builder = WebApplication.CreateBuilder(args);
+	public class Program
+	{
+		public static void Main(string[] args)
+		{
+			var builder = WebApplication.CreateBuilder(args);
 
-            // Add services to the container.
+			// Add services to the container.
 
-            builder.Services.AddControllers();
-            // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-            builder.Services.AddEndpointsApiExplorer();
-            builder.Services.AddSwaggerGen();
+			builder.Services.AddControllers();
 
-            var app = builder.Build();
+			builder.Services.AddValidationServices();
 
-            // Configure the HTTP request pipeline.
-            if (app.Environment.IsDevelopment())
-            {
-                app.UseSwagger();
-                app.UseSwaggerUI();
-            }
+			var connectionString = builder.Configuration.GetConnectionString("ListaDeTarefaConnection");
 
-            app.UseHttpsRedirection();
+			builder.Services.AddProjectDependencies(connectionString!);
+			
+			builder.Services.AddControllers()
+					.AddJsonOptions(options =>
+					{
+						options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+					});
 
-            app.UseAuthorization();
+			// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+			builder.Services.AddEndpointsApiExplorer();
+			builder.Services.AddSwaggerGen();
+
+			var app = builder.Build();
+
+			// Configure the HTTP request pipeline.
+			if (app.Environment.IsDevelopment())
+			{
+				app.UseSwagger();
+				app.UseSwaggerUI();
+			}
+
+			app.UseHttpsRedirection();
+
+			app.UseAuthorization();
 
 
-            app.MapControllers();
+			app.MapControllers();
 
-            app.Run();
-        }
-    }
+			app.Run();
+		}
+	}
 }

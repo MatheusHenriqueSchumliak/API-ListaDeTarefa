@@ -18,7 +18,6 @@ namespace ListaDeTarefa.Infrastructure.DependencyInjection
 			services.AddScoped<ITarefaRepository, TarefaRepository>();
 			services.AddScoped<ITarefaService, TarefaService>();
 
-
 			return services;
 		}
 	}
