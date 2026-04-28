@@ -6,4 +6,17 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\ListaDeTarefa.Domain\ListaDeTarefa.Domain.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="DTOs\Tarefa\" />
+    <Folder Include="Factories\" />
+    <Folder Include="DependencyInjection\" />
+    <Folder Include="Interfaces\" />
+    <Folder Include="Services\" />
+    <Folder Include="Validators\Tarefa\" />
+  </ItemGroup>
+
 </Project>

@@ -6,4 +6,16 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\ListaDeTarefa.Application\ListaDeTarefa.Application.csproj" />
+    <ProjectReference Include="..\ListaDeTarefa.Domain\ListaDeTarefa.Domain.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Context\" />
+    <Folder Include="DependencyInjection\" />
+    <Folder Include="Mapping\" />
+    <Folder Include="Repository\" />
+  </ItemGroup>
+
 </Project>
