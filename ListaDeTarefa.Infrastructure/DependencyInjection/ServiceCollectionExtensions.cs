@@ -1,8 +1,10 @@
-﻿
-
-using ListaDeTarefa.Infrastructure.Context;
-using Microsoft.EntityFrameworkCore;
+﻿using ListaDeTarefa.Application.Interfaces.IRepository;
+using ListaDeTarefa.Application.Interfaces.IService;
 using Microsoft.Extensions.DependencyInjection;
+using ListaDeTarefa.Infrastructure.Repository;
+using ListaDeTarefa.Infrastructure.Context;
+using ListaDeTarefa.Application.Services;
+using Microsoft.EntityFrameworkCore;
 
 namespace ListaDeTarefa.Infrastructure.DependencyInjection
 {

@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using ListaDeTarefa.Infrastructure.Mapping;
 using ListaDeTarefa.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 

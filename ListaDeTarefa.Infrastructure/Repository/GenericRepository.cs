@@ -1,6 +1,6 @@
 ﻿using ListaDeTarefa.Application.Interfaces.IRepository;
-using ListaDeTarefa.Domain.Entities.Base;
 using ListaDeTarefa.Infrastructure.Context;
+using ListaDeTarefa.Domain.Entities.Base;
 using Microsoft.EntityFrameworkCore;
 
 namespace ListaDeTarefa.Infrastructure.Repository
