@@ -26,7 +26,7 @@ namespace ListaDeTarefa.Infrastructure.Repository
 			}
 			catch (Exception ex)
 			{
-				return Enumerable.Empty<T>();
+				throw new Exception($"{Enumerable.Empty<T>}", ex);
 			}
 		}
 
