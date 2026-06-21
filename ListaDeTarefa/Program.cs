@@ -1,7 +1,7 @@
 
-using ListaDeTarefa.Application.DependencyInjection;
 using ListaDeTarefa.Infrastructure.DependencyInjection;
-using Microsoft.Extensions.Configuration;
+using ListaDeTarefa.Application.DependencyInjection;
+using ListaDeTarefa.DependencyInjection;
 using System.Text.Json.Serialization;
 
 namespace ListaDeTarefa
@@ -22,7 +22,7 @@ namespace ListaDeTarefa
 			var connectionString = builder.Configuration.GetConnectionString("ListaDeTarefaConnection");
 
 			builder.Services.AddProjectDependencies(connectionString!);
-			
+
 			builder.Services.AddControllers()
 					.AddJsonOptions(options =>
 					{
@@ -33,13 +33,14 @@ namespace ListaDeTarefa
 			builder.Services.AddEndpointsApiExplorer();
 			builder.Services.AddSwaggerGen();
 
+			builder.Services.AddSwaggerDocumentation();
+
 			var app = builder.Build();
 
 			// Configure the HTTP request pipeline.
 			if (app.Environment.IsDevelopment())
 			{
-				app.UseSwagger();
-				app.UseSwaggerUI();
+				app.UseSwaggerDocumentation();
 			}
 
 			app.UseHttpsRedirection();
