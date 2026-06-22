@@ -25,6 +25,9 @@ jobs:
       - name: Install SonarCloud scanner
         run: dotnet tool install --global dotnet-sonarscanner
 
+      - name: Restore dependencies
+        run: dotnet restore
+
       - name: Begin SonarCloud analysis
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
@@ -38,11 +41,13 @@ jobs:
             /d:sonar.exclusions="**/Migrations/**"
 
       - name: Build
-        run: dotnet build --no-incremental
+        run: dotnet build --no-incremental --configuration Release
 
       - name: Run tests with coverage
         run: |
           dotnet test \
+            --no-build \
+            --configuration Release \
             --collect:"XPlat Code Coverage" \
             -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=opencover
 
