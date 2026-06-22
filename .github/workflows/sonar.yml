@@ -31,7 +31,7 @@ jobs:
         run: |
           dotnet sonarscanner begin \
             /k:"MatheusHenriqueSchumliak_API-ListaDeTarefa" \
-            /o:"matheushenriqueschumliak" \
+            /o:"mhs-developer" \
             /d:sonar.token="$SONAR_TOKEN" \
             /d:sonar.host.url="https://sonarcloud.io" \
             /d:sonar.cs.opencover.reportsPaths="**/coverage.opencover.xml" \
