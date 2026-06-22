@@ -15,7 +15,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 0  # Necessário para análise completa do SonarCloud
+          fetch-depth: 0
 
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
@@ -43,7 +43,7 @@ jobs:
         run: dotnet tool install --global dotnet-coverage
 
       - name: Restore dependencies
-        run: dotnet restore API-ListaDeTarefa.sln
+        run: dotnet restore ListaDeTarefa/ListaDeTarefa.sln
 
       - name: Begin SonarCloud analysis
         env:
@@ -59,11 +59,11 @@ jobs:
             /d:sonar.test.exclusions="**/*Tests.cs,**/*Test.cs"
 
       - name: Build
-        run: dotnet build API-ListaDeTarefa.sln --no-restore --configuration Release
+        run: dotnet build ListaDeTarefa/ListaDeTarefa.sln --no-restore --configuration Release
 
       - name: Run tests with coverage
         run: |
-          dotnet-coverage collect "dotnet test API-ListaDeTarefa.sln --no-build --configuration Release --verbosity normal" -f xml -o "coverage.xml"
+          dotnet-coverage collect "dotnet test ListaDeTarefa/ListaDeTarefa.sln --no-build --configuration Release --verbosity normal" -f xml -o "coverage.xml"
 
       - name: End SonarCloud analysis
         env:
