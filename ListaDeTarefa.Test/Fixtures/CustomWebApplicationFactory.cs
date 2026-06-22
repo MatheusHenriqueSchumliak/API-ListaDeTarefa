@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.EntityFrameworkCore.Internal;
 using ListaDeTarefa.Infrastructure.Context;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.EntityFrameworkCore;
@@ -13,8 +14,10 @@ namespace ListaDeTarefa.Test.Fixtures
 		{
 			builder.ConfigureServices(services =>
 			{
-				// Remove o DbContext existente
+				// Remove o DbContextPool e serviços relacionados
 				services.RemoveAll(typeof(DbContextOptions<ListaDeTarefaContexto>));
+				services.RemoveAll(typeof(IDbContextPool<ListaDeTarefaContexto>));
+				services.RemoveAll(typeof(IScopedDbContextLease<ListaDeTarefaContexto>));
 
 				// Adiciona um banco de dados InMemory para testes
 				services.AddDbContext<ListaDeTarefaContexto>(options =>

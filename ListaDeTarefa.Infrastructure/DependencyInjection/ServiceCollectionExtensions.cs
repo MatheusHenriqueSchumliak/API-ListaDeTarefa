@@ -20,12 +20,9 @@ namespace ListaDeTarefa.Infrastructure.DependencyInjection
 			Console.WriteLine($"Connection String: {connectionString}");
 			Console.WriteLine("=================================");
 
-			services.AddDbContextPool<ListaDeTarefaContexto>(options =>
-				options.UseSqlServer(connectionString, sql =>
-				{
-				
-				})
-				.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking)
+			services.AddDbContext<ListaDeTarefaContexto>(options =>
+				options.UseSqlServer(connectionString)
+					   .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking)
 			);
 
 			services.AddMemoryCache();
@@ -34,11 +31,8 @@ namespace ListaDeTarefa.Infrastructure.DependencyInjection
 			return services;
 		}
 
-		public static IServiceCollection AddProjectDependencies(this IServiceCollection services, string connectionString)
+		public static IServiceCollection AddProjectDependencies(this IServiceCollection services)
 		{
-			services.AddDbContext<ListaDeTarefaContexto>(options =>
-				options.UseSqlServer(connectionString));
-
 			services.AddScoped<ITarefaRepository, TarefaRepository>();
 			services.AddScoped<ITarefaService, TarefaService>();
 

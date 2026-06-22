@@ -21,7 +21,7 @@ namespace ListaDeTarefa
 
 			var connectionString = builder.Configuration.GetConnectionString("ListaDeTarefaConnection");
 
-			builder.Services.AddProjectDependencies(connectionString!);
+			builder.Services.AddProjectDependencies();
 
 			builder.Services.AddControllers()
 					.AddJsonOptions(options =>
