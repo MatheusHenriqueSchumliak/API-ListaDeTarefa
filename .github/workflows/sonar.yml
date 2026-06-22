@@ -15,18 +15,35 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 0
+          fetch-depth: 0  # Necessário para análise completa do SonarCloud
 
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: '8.0.x'
 
+      - name: Cache SonarCloud packages
+        uses: actions/cache@v4
+        with:
+          path: ~\.sonar\cache
+          key: ${{ runner.os }}-sonar
+          restore-keys: ${{ runner.os }}-sonar
+
+      - name: Cache NuGet packages
+        uses: actions/cache@v4
+        with:
+          path: ~/.nuget/packages
+          key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json') }}
+          restore-keys: ${{ runner.os }}-nuget-
+
       - name: Install SonarCloud scanner
         run: dotnet tool install --global dotnet-sonarscanner
 
+      - name: Install coverage tool
+        run: dotnet tool install --global dotnet-coverage
+
       - name: Restore dependencies
-        run: dotnet restore ./ListaDeTarefa/ListaDeTarefa.sln
+        run: dotnet restore
 
       - name: Begin SonarCloud analysis
         env:
@@ -37,19 +54,16 @@ jobs:
             /o:"mhs-developer" \
             /d:sonar.token="$SONAR_TOKEN" \
             /d:sonar.host.url="https://sonarcloud.io" \
-            /d:sonar.cs.opencover.reportsPaths="**/coverage.opencover.xml" \
-            /d:sonar.exclusions="**/Migrations/**"
+            /d:sonar.cs.vscoveragexml.reportsPaths="coverage.xml" \
+            /d:sonar.exclusions="**/Migrations/**,**/bin/**,**/obj/**" \
+            /d:sonar.test.exclusions="**/*Tests.cs,**/*Test.cs"
 
       - name: Build
-        run: dotnet build ./ListaDeTarefa/ListaDeTarefa.sln --no-incremental --configuration Release
+        run: dotnet build --no-restore --configuration Release
 
       - name: Run tests with coverage
         run: |
-          dotnet test ./ListaDeTarefa/ListaDeTarefa.sln \
-            --no-build \
-            --configuration Release \
-            --collect:"XPlat Code Coverage" \
-            -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=opencover
+          dotnet-coverage collect "dotnet test --no-build --configuration Release --verbosity normal" -f xml -o "coverage.xml"
 
       - name: End SonarCloud analysis
         env:
