@@ -19,8 +19,6 @@ namespace ListaDeTarefa
 			builder.Services.AddValidationServices();
 			builder.Services.AddInfrastructureServices(builder.Configuration);
 
-			var connectionString = builder.Configuration.GetConnectionString("ListaDeTarefaConnection");
-
 			builder.Services.AddProjectDependencies();
 
 			builder.Services.AddControllers()
