@@ -49,8 +49,8 @@ namespace ListaDeTarefa.Test.Integration.Services
 			// Arrange
 			var tarefas = new List<Tarefa>
 			{
-				new Tarefa().Criar("Tarefa 1"),
-				new Tarefa().Criar("Tarefa 2")
+				Tarefa.Criar("Tarefa 1"),
+				Tarefa.Criar("Tarefa 2")
 			};
 			var mockRepo = new Mock<ITarefaRepository>();
 			mockRepo.Setup(r => r.BuscarTodos()).ReturnsAsync(tarefas);
@@ -67,7 +67,7 @@ namespace ListaDeTarefa.Test.Integration.Services
 		public async Task BuscarPorId_DeveRetornarTarefa_QuandoExiste()
 		{
 			// Arrange
-			var tarefa = new Tarefa().Criar("Buscar por Id");
+			var tarefa = Tarefa.Criar("Buscar por Id");
 			var mockRepo = new Mock<ITarefaRepository>();
 			mockRepo.Setup(r => r.BuscarPorId(It.IsAny<Guid>())).ReturnsAsync(tarefa);
 			var service = new TarefaService(mockRepo.Object);
@@ -113,7 +113,7 @@ namespace ListaDeTarefa.Test.Integration.Services
 		public async Task Atualizar_DeveLancarExcecao_QuandoDescricaoDuplicada()
 		{
 			// Arrange
-			var tarefa = new Tarefa().Criar("Original");
+			var tarefa = Tarefa.Criar("Original");
 			var mockRepo = new Mock<ITarefaRepository>();
 			mockRepo.Setup(r => r.BuscarPorId(It.IsAny<Guid>())).ReturnsAsync(tarefa);
 			mockRepo.Setup(r => r.BuscarPorDescricao("Duplicada")).ReturnsAsync(new Tarefa { Id = Guid.NewGuid() });
@@ -129,7 +129,7 @@ namespace ListaDeTarefa.Test.Integration.Services
 		public async Task Atualizar_DeveLancarExcecao_QuandoStatusNaoConcluido()
 		{
 			// Arrange
-			var tarefa = new Tarefa().Criar("Original");
+			var tarefa = Tarefa.Criar("Original");
 			var mockRepo = new Mock<ITarefaRepository>();
 			mockRepo.Setup(r => r.BuscarPorId(It.IsAny<Guid>())).ReturnsAsync(tarefa);
 			mockRepo.Setup(r => r.BuscarPorDescricao("Original")).ReturnsAsync(tarefa);
@@ -157,7 +157,7 @@ namespace ListaDeTarefa.Test.Integration.Services
 		public async Task Remover_DeveRemoverComSucesso_QuandoTarefaExiste()
 		{
 			// Arrange
-			var tarefa = new Tarefa().Criar("Remover");
+			var tarefa = Tarefa.Criar("Remover");
 			var mockRepo = new Mock<ITarefaRepository>();
 			mockRepo.Setup(r => r.BuscarPorId(It.IsAny<Guid>())).ReturnsAsync(tarefa);
 			mockRepo.Setup(r => r.Remover(tarefa)).Returns(Task.CompletedTask);

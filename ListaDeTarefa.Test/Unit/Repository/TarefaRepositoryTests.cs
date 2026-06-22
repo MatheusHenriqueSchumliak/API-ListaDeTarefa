@@ -22,7 +22,7 @@ namespace ListaDeTarefa.Test.Unit.Repository
 		{
 			// Arrange
 			var repository = CriarRepository();
-			var tarefa = new Tarefa().Criar("Nova tarefa");
+			var tarefa = Tarefa.Criar("Nova tarefa");
 
 			// Act
 			await repository.Adicionar(tarefa);
@@ -38,8 +38,8 @@ namespace ListaDeTarefa.Test.Unit.Repository
 		{
 			// Arrange
 			var repository = CriarRepository();
-			await repository.Adicionar(new Tarefa().Criar("Tarefa 1"));
-			await repository.Adicionar(new Tarefa().Criar("Tarefa 2"));
+			await repository.Adicionar(Tarefa.Criar("Tarefa 1"));
+			await repository.Adicionar(Tarefa.Criar("Tarefa 2"));
 
 			// Act
 			var tarefas = (await repository.BuscarTodos()).ToList();
@@ -53,7 +53,7 @@ namespace ListaDeTarefa.Test.Unit.Repository
 		{
 			// Arrange
 			var repository = CriarRepository();
-			var tarefa = new Tarefa().Criar("Tarefa para remover");
+			var tarefa = Tarefa.Criar("Tarefa para remover");
 			await repository.Adicionar(tarefa);
 
 			// Act
@@ -68,7 +68,7 @@ namespace ListaDeTarefa.Test.Unit.Repository
 		public async Task Atualizar_DeveAlterarDescricaoDaTarefa()
 		{
 			var repository = CriarRepository();
-			var tarefa = new Tarefa().Criar("Tarefa original");
+			var tarefa = Tarefa.Criar("Tarefa original");
 			await repository.Adicionar(tarefa);
 
 			tarefa.AlterarDescricao("Tarefa alterada");
@@ -90,7 +90,7 @@ namespace ListaDeTarefa.Test.Unit.Repository
 		public async Task BuscarPorDescricao_DeveRetornarTarefaCorreta()
 		{
 			var repository = CriarRepository();
-			var tarefa = new Tarefa().Criar("Descrição única");
+			var tarefa = Tarefa.Criar("Descrição única");
 			await repository.Adicionar(tarefa);
 
 			var resultado = await repository.BuscarPorDescricao("Descrição única");
@@ -110,7 +110,7 @@ namespace ListaDeTarefa.Test.Unit.Repository
 		public async Task NaoPermiteAlterarDescricaoDeTarefaConcluida()
 		{
 			var repository = CriarRepository();
-			var tarefa = new Tarefa().Criar("Tarefa para concluir");
+			var tarefa = Tarefa.Criar("Tarefa para concluir");
 			await repository.Adicionar(tarefa);
 
 			tarefa.Concluir();

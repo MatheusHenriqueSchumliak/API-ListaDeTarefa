@@ -11,7 +11,7 @@ namespace ListaDeTarefa.Domain.Entities
 
 		public Tarefa() { }
 
-		public Tarefa Criar(string descricao)
+		public static Tarefa Criar(string descricao)
 		{
 			if (string.IsNullOrWhiteSpace(descricao))
 				throw new ArgumentException("Descrição obrigatória.");

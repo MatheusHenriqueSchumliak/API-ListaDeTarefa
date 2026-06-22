@@ -18,7 +18,7 @@ namespace ListaDeTarefa.Application.Factories
 
 		public static Tarefa createDtoParaEntidade(TarefaCreateDto dto)
 		{
-			return new Tarefa().Criar(dto.Descricao);
+			return Tarefa.Criar(dto.Descricao);
 		}
 
 		public static void UpdateDtoParaEntidade(Tarefa tarefa, TarefaUpdateDto dto)

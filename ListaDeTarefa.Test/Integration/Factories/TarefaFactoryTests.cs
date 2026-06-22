@@ -11,7 +11,7 @@ namespace ListaDeTarefa.Test.Integration.Factories
 		[Fact]
 		public void EntidadeParaDto_DeveMapearCorretamente()
 		{
-			var tarefa = new Tarefa().Criar("Teste");
+			var tarefa = Tarefa.Criar("Teste");
 			tarefa.Concluir();
 
 			var dto = TarefaFactory.EntidadeParaDto(tarefa);
@@ -37,7 +37,7 @@ namespace ListaDeTarefa.Test.Integration.Factories
 		[Fact]
 		public void UpdateDtoParaEntidade_DeveAtualizarDescricaoEConcluir()
 		{
-			var tarefa = new Tarefa().Criar("Antiga");
+			var tarefa = Tarefa.Criar("Antiga");
 			var dto = new TarefaUpdateDto { Descricao = "Nova", Status = (char)StatusTarefa.Concluido };
 
 			TarefaFactory.UpdateDtoParaEntidade(tarefa, dto);
@@ -50,7 +50,7 @@ namespace ListaDeTarefa.Test.Integration.Factories
 		[Fact]
 		public void UpdateDtoParaEntidade_DeveAtualizarApenasDescricao_SeStatusNaoConcluido()
 		{
-			var tarefa = new Tarefa().Criar("Antiga");
+			var tarefa = Tarefa.Criar("Antiga");
 			var dto = new TarefaUpdateDto { Descricao = "Nova", Status = (char)StatusTarefa.Pendente };
 
 			TarefaFactory.UpdateDtoParaEntidade(tarefa, dto);
@@ -70,7 +70,7 @@ namespace ListaDeTarefa.Test.Integration.Factories
 		[Fact]
 		public void UpdateDtoParaEntidade_DeveLancarExcecao_DescricaoVazia()
 		{
-			var tarefa = new Tarefa().Criar("Antiga");
+			var tarefa = Tarefa.Criar("Antiga");
 			var dto = new TarefaUpdateDto { Descricao = "", Status = (char)StatusTarefa.Pendente };
 			Assert.Throws<ArgumentException>(() => TarefaFactory.UpdateDtoParaEntidade(tarefa, dto));
 		}
