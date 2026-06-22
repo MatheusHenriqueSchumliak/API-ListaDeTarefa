@@ -26,7 +26,7 @@ jobs:
         run: dotnet tool install --global dotnet-sonarscanner
 
       - name: Restore dependencies
-        run: dotnet restore
+        run: dotnet restore ./ListaDeTarefa/ListaDeTarefa.sln
 
       - name: Begin SonarCloud analysis
         env:
@@ -41,11 +41,11 @@ jobs:
             /d:sonar.exclusions="**/Migrations/**"
 
       - name: Build
-        run: dotnet build --no-incremental --configuration Release
+        run: dotnet build ./ListaDeTarefa/ListaDeTarefa.sln --no-incremental --configuration Release
 
       - name: Run tests with coverage
         run: |
-          dotnet test \
+          dotnet test ./ListaDeTarefa/ListaDeTarefa.sln \
             --no-build \
             --configuration Release \
             --collect:"XPlat Code Coverage" \
