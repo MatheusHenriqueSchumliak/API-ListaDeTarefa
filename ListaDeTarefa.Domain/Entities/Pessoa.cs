@@ -1,4 +1,5 @@
 ﻿using ListaDeTarefa.Domain.Entities.Base;
+using ListaDeTarefa.Domain.Enumerables;
 
 namespace ListaDeTarefa.Domain.Entities
 {
@@ -10,10 +11,11 @@ namespace ListaDeTarefa.Domain.Entities
 		public string Telefone { get; private set; }
 		public string WhatsApp { get; private set; }
 		public DateTimeOffset DataNascimento { get; private set; }
-
+		public TipoPessoa TipoPessoa { get; private set; }
+		public ICollection<Tarefa> Tarefas { get; private set; } = new List<Tarefa>();
 		public Pessoa() { }
 
-		public static Pessoa Criar(string nome, string sobrenome, string email, string telefone, string whatsapp, DateTimeOffset dataNascimento)
+		public static Pessoa Criar(string nome, string sobrenome, string email, string telefone, string whatsapp, DateTimeOffset dataNascimento, TipoPessoa tipoPessoa)
 		{
 			if (string.IsNullOrWhiteSpace(nome))
 				throw new ArgumentException("O nome não pode ser vazio.", nameof(nome));
@@ -26,9 +28,8 @@ namespace ListaDeTarefa.Domain.Entities
 			if (string.IsNullOrWhiteSpace(whatsapp))
 				throw new ArgumentException("O WhatsApp não pode ser vazio.", nameof(whatsapp));
 
-			return new Pessoa { Nome = nome, Sobrenome = sobrenome, Email = email, Telefone = telefone, WhatsApp = whatsapp, DataNascimento = dataNascimento };
+			return new Pessoa { Nome = nome, Sobrenome = sobrenome, Email = email, Telefone = telefone, WhatsApp = whatsapp, DataNascimento = dataNascimento, TipoPessoa = tipoPessoa };
 		}
-
 
 
 	}

@@ -31,6 +31,11 @@ namespace ListaDeTarefa.Infrastructure.Mapping
 			builder.Property(t => t.DataAtualizacao);
 
 			builder.Property(t => t.DataConclusao);
+
+			builder.HasOne(t => t.Pessoa)
+				.WithMany(p => p.Tarefas)
+				.HasForeignKey(t => t.PessoaId)
+				.OnDelete(DeleteBehavior.SetNull);
 		}
 	}
 }

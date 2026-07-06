@@ -33,8 +33,16 @@ namespace ListaDeTarefa.Infrastructure.DependencyInjection
 
 		public static IServiceCollection AddProjectDependencies(this IServiceCollection services)
 		{
+			#region REPOSITORIES
 			services.AddScoped<ITarefaRepository, TarefaRepository>();
+			services.AddScoped<IPessoaRepository, PessoaRepository>();
+			#endregion
+
+			#region SERVICES
 			services.AddScoped<ITarefaService, TarefaService>();
+			services.AddScoped<IPessoaService, PessoaService>();
+			#endregion
+
 
 			return services;
 		}

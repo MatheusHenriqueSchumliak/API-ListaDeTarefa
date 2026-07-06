@@ -8,6 +8,7 @@ namespace ListaDeTarefa.Infrastructure.Context
 	public class ListaDeTarefaContexto(DbContextOptions<ListaDeTarefaContexto> options) : DbContext(options)
 	{
 		public DbSet<Tarefa> Tarefas { get; set; }
+		public DbSet<Pessoa> Pessoas { get; set; }
 
 		protected override void OnModelCreating(ModelBuilder modelBuilder)
 		{

@@ -8,7 +8,8 @@ namespace ListaDeTarefa.Domain.Entities
 		public string Descricao { get; private set; }
 		public StatusTarefa Status { get; private set; }
 		public DateTimeOffset? DataConclusao { get; private set; }
-
+		public Guid? PessoaId { get; private set; }
+		public Pessoa? Pessoa { get; private set; }
 		public Tarefa() { }
 
 		public static Tarefa Criar(string descricao)
@@ -43,6 +44,22 @@ namespace ListaDeTarefa.Domain.Entities
 
 			Status = StatusTarefa.Concluido;
 			DataConclusao = DateTimeOffset.UtcNow;
+			DataAtualizacao = DateTimeOffset.UtcNow;
+		}
+
+		public void AtribuirPessoa(Pessoa pessoa)
+		{
+			if (pessoa == null)
+				throw new ArgumentNullException(nameof(pessoa), "Pessoa não pode ser nula.");
+			Pessoa = pessoa;
+			PessoaId = pessoa.Id;
+			DataAtualizacao = DateTimeOffset.UtcNow;
+		}
+
+		public void RemoverPessoa()
+		{
+			Pessoa = null;
+			PessoaId = null;
 			DataAtualizacao = DateTimeOffset.UtcNow;
 		}
 	}

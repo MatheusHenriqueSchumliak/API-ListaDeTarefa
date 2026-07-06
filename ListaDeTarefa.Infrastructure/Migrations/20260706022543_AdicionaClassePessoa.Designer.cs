@@ -4,6 +4,7 @@ using ListaDeTarefa.Infrastructure.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ListaDeTarefa.Infrastructure.Migrations
 {
     [DbContext(typeof(ListaDeTarefaContexto))]
-    partial class ListaDeTarefaContextoModelSnapshot : ModelSnapshot
+    [Migration("20260706022543_AdicionaClassePessoa")]
+    partial class AdicionaClassePessoa
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -39,35 +42,30 @@ namespace ListaDeTarefa.Infrastructure.Migrations
 
                     b.Property<string>("Email")
                         .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Nome")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Sobrenome")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Telefone")
                         .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("TipoPessoa")
                         .HasColumnType("int");
 
                     b.Property<string>("WhatsApp")
                         .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Pessoas", (string)null);
+                    b.ToTable("Pessoas");
                 });
 
             modelBuilder.Entity("ListaDeTarefa.Domain.Entities.Tarefa", b =>
@@ -90,32 +88,12 @@ namespace ListaDeTarefa.Infrastructure.Migrations
                         .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)");
 
-                    b.Property<Guid?>("PessoaId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<char>("Status")
                         .HasColumnType("char(1)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("PessoaId");
-
                     b.ToTable("Tarefas", (string)null);
-                });
-
-            modelBuilder.Entity("ListaDeTarefa.Domain.Entities.Tarefa", b =>
-                {
-                    b.HasOne("ListaDeTarefa.Domain.Entities.Pessoa", "Pessoa")
-                        .WithMany("Tarefas")
-                        .HasForeignKey("PessoaId")
-                        .OnDelete(DeleteBehavior.SetNull);
-
-                    b.Navigation("Pessoa");
-                });
-
-            modelBuilder.Entity("ListaDeTarefa.Domain.Entities.Pessoa", b =>
-                {
-                    b.Navigation("Tarefas");
                 });
 #pragma warning restore 612, 618
         }
