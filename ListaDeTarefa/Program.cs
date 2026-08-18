@@ -1,7 +1,11 @@
 
-using ListaDeTarefa.Infrastructure.DependencyInjection;
+using ListaDeTarefa.Application.Commom;
 using ListaDeTarefa.Application.DependencyInjection;
 using ListaDeTarefa.DependencyInjection;
+using ListaDeTarefa.Infrastructure.DependencyInjection;
+using OpenTelemetry.Metrics;
+using OpenTelemetry.Resources;
+using OpenTelemetry.Trace;
 using System.Text.Json.Serialization;
 
 namespace ListaDeTarefa
@@ -13,6 +17,47 @@ namespace ListaDeTarefa
 			var builder = WebApplication.CreateBuilder(args);
 
 			// Add services to the container.
+			#region OpenTelemetry
+
+			builder.Services.AddOpenTelemetry().WithTracing(tracing =>
+			{
+				tracing.SetResourceBuilder(ResourceBuilder.CreateDefault().AddService("lista-de-tarefa-tracing"))
+					   .SetSampler(new AlwaysOnSampler())
+					   .AddSource(TelemetryHelper.ActivitySourceName)
+					   .AddAspNetCoreInstrumentation(opt =>
+					   {
+						   opt.RecordException = true;
+					   })
+					   .AddHttpClientInstrumentation(opt =>
+					   {
+						   opt.RecordException = true;
+					   })
+					   .AddEntityFrameworkCoreInstrumentation()
+					   ;
+
+				if (builder.Environment.IsDevelopment())
+				{
+					tracing.AddConsoleExporter();
+				}
+			});
+			//}).WithMetrics(metrics =>
+			//{
+			//	metrics.SetResourceBuilder(ResourceBuilder.CreateDefault().AddService("lista-de-tarefa-métrica"))
+			//		   .AddMeter(Telemetry.MeterName)
+			//		   .AddAspNetCoreInstrumentation()
+			//		   .AddHttpClientInstrumentation()
+			//		   .AddRuntimeInstrumentation()
+			//		   .AddOtlpExporter(otl =>
+			//		   {
+			//			   otl.Endpoint = new Uri(builder.Configuration["OpenTelemetry:Endpoint"]!);
+			//		   });
+
+			//	if (builder.Environment.IsDevelopment())
+			//	{
+			//		metrics.AddConsoleExporter();
+			//	}
+			//});
+			#endregion
 
 			builder.Services.AddControllers();
 

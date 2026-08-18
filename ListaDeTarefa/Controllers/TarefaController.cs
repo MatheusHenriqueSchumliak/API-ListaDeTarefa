@@ -1,27 +1,70 @@
 ﻿using ListaDeTarefa.Application.Interfaces.IService;
 using ListaDeTarefa.Application.DTOs.Tarefa;
+using ListaDeTarefa.Application.Commom;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ListaDeTarefa.Controllers
 {
 	[Route("api/[controller]/[action]")]
 	[ApiController]
-	public class TarefaController(ITarefaService tarefaService) : ControllerBase
+	public class TarefaController(ITarefaService tarefaService, ILogger<TarefaController> logger) : ControllerBase
 	{
 		private readonly ITarefaService _tarefaService = tarefaService;
+		private readonly ILogger<TarefaController> _logger = logger;
 
 		[HttpGet("{descricao}")]
 		public async Task<ActionResult<TarefaDto>> BuscarPorDescricao(string descricao)
 		{
-			if (string.IsNullOrWhiteSpace(descricao))
-				return BadRequest("A descrição não pode ser vazia.");
+			using var activity = TelemetryHelper.IniciaRequisicao(
+				"TarefaController.BuscarPorDescricao",
+				new Dictionary<string, object?>
+				{
+					["http.method"] = "GET",
+					["http.route"] = "/api/tarefa/BuscarPorDescricao/{descricao}",
+					["tarefa.descricao"] = descricao
+				});
 
-			var tarefa = await _tarefaService.BuscarPorDescricao(descricao);
+			_logger.LogInformation("Iniciando busca por descrição: {Descricao}", descricao);
 
-			if (tarefa == null)
-				return NotFound();
+			try
+			{
+				if (string.IsNullOrWhiteSpace(descricao))
+				{
+					_logger.LogWarning("Descrição vazia ou nula recebida");
+					activity.AdicionaTag("validation.error", "empty_description");
+					return BadRequest("A descrição não pode ser vazia.");
+				}
 
-			return Ok(tarefa);
+				var tarefa = await _tarefaService.BuscarPorDescricao(descricao);
+
+				if (tarefa == null)
+				{
+					_logger.LogInformation("Tarefa não encontrada com descrição: {Descricao}", descricao);
+					activity.AdicionaTags(new Dictionary<string, object?>
+					{
+						["result.found"] = false,
+						["resource.type"] = "Tarefa"
+					});
+					activity.RegistraSucesso("Busca concluída - nenhum registro encontrado");
+					return NotFound();
+				}
+
+				_logger.LogInformation("Tarefa encontrada: {TarefaId}", tarefa.Id);
+				activity.AdicionaTags(new Dictionary<string, object?>
+				{
+					["tarefa.id"] = tarefa.Id,
+					["result.found"] = true
+				});
+				activity.RegistraSucesso();
+
+				return Ok(tarefa);
+			}
+			catch (Exception ex)
+			{
+				_logger.LogError(ex, "Erro ao buscar tarefa por descrição: {Descricao}", descricao);
+				activity.RegistraErro(ex);
+				throw;
+			}
 		}
 
 		[HttpGet]
