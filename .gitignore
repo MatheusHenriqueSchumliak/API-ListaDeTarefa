@@ -15,3 +15,8 @@ TestResults/
 # Others
 *.log
 *.DS_Store
+
+# App settings sensíveis
+**/appsettings.json
+**/appsettings.*.json
+!**/appsettings.Example.json
