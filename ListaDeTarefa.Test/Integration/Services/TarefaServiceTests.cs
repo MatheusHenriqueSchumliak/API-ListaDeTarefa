@@ -1,4 +1,5 @@
 ﻿using ListaDeTarefa.Application.DTOs.Tarefa;
+using ListaDeTarefa.Application.Interfaces;
 using ListaDeTarefa.Application.Interfaces.IRepository;
 using ListaDeTarefa.Application.Services;
 using ListaDeTarefa.Domain.Entities;
@@ -16,7 +17,7 @@ namespace ListaDeTarefa.Test.Integration.Services
 			// Arrange
 			var mockRepo = new Mock<ITarefaRepository>();
 			mockRepo.Setup(r => r.BuscarPorDescricao("Teste")).ReturnsAsync(new Tarefa());
-			var service = new TarefaService(mockRepo.Object);
+			var service = new TarefaService(mockRepo.Object, new Mock<IPessoaRepository>().Object, new Mock<IDespachanteEventos>().Object);
 
 			var dto = new TarefaCreateDto { Descricao = "Teste" };
 
@@ -31,7 +32,7 @@ namespace ListaDeTarefa.Test.Integration.Services
 			var mockRepo = new Mock<ITarefaRepository>();
 			mockRepo.Setup(r => r.BuscarPorDescricao("Nova")).ReturnsAsync((Tarefa?)null);
 			mockRepo.Setup(r => r.Adicionar(It.IsAny<Tarefa>())).Returns(Task.CompletedTask);
-			var service = new TarefaService(mockRepo.Object);
+			var service = new TarefaService(mockRepo.Object, new Mock<IPessoaRepository>().Object, new Mock<IDespachanteEventos>().Object);
 
 			var dto = new TarefaCreateDto { Descricao = "Nova" };
 
@@ -54,7 +55,7 @@ namespace ListaDeTarefa.Test.Integration.Services
 			};
 			var mockRepo = new Mock<ITarefaRepository>();
 			mockRepo.Setup(r => r.BuscarTodos()).ReturnsAsync(tarefas);
-			var service = new TarefaService(mockRepo.Object);
+			var service = new TarefaService(mockRepo.Object, new Mock<IPessoaRepository>().Object, new Mock<IDespachanteEventos>().Object);
 
 			// Act
 			var result = await service.BuscarTodos();
@@ -70,7 +71,7 @@ namespace ListaDeTarefa.Test.Integration.Services
 			var tarefa = Tarefa.Criar("Buscar por Id");
 			var mockRepo = new Mock<ITarefaRepository>();
 			mockRepo.Setup(r => r.BuscarPorId(It.IsAny<Guid>())).ReturnsAsync(tarefa);
-			var service = new TarefaService(mockRepo.Object);
+			var service = new TarefaService(mockRepo.Object, new Mock<IPessoaRepository>().Object, new Mock<IDespachanteEventos>().Object);
 
 			// Act
 			var result = await service.BuscarPorId(Guid.NewGuid());
@@ -86,7 +87,7 @@ namespace ListaDeTarefa.Test.Integration.Services
 			// Arrange
 			var mockRepo = new Mock<ITarefaRepository>();
 			mockRepo.Setup(r => r.BuscarPorId(It.IsAny<Guid>())).ReturnsAsync((Tarefa?)null);
-			var service = new TarefaService(mockRepo.Object);
+			var service = new TarefaService(mockRepo.Object, new Mock<IPessoaRepository>().Object, new Mock<IDespachanteEventos>().Object);
 
 			// Act
 			var result = await service.BuscarPorId(Guid.NewGuid());
@@ -101,7 +102,7 @@ namespace ListaDeTarefa.Test.Integration.Services
 			// Arrange
 			var mockRepo = new Mock<ITarefaRepository>();
 			mockRepo.Setup(r => r.BuscarPorId(It.IsAny<Guid>())).ReturnsAsync((Tarefa?)null);
-			var service = new TarefaService(mockRepo.Object);
+			var service = new TarefaService(mockRepo.Object, new Mock<IPessoaRepository>().Object, new Mock<IDespachanteEventos>().Object);
 
 			var dto = new TarefaUpdateDto { Descricao = "Atualizada", Status = (char)StatusTarefa.Concluido };
 
@@ -117,7 +118,7 @@ namespace ListaDeTarefa.Test.Integration.Services
 			var mockRepo = new Mock<ITarefaRepository>();
 			mockRepo.Setup(r => r.BuscarPorId(It.IsAny<Guid>())).ReturnsAsync(tarefa);
 			mockRepo.Setup(r => r.BuscarPorDescricao("Duplicada")).ReturnsAsync(new Tarefa { Id = Guid.NewGuid() });
-			var service = new TarefaService(mockRepo.Object);
+			var service = new TarefaService(mockRepo.Object, new Mock<IPessoaRepository>().Object, new Mock<IDespachanteEventos>().Object);
 
 			var dto = new TarefaUpdateDto { Descricao = "Duplicada", Status = (char)StatusTarefa.Concluido };
 
@@ -133,7 +134,7 @@ namespace ListaDeTarefa.Test.Integration.Services
 			var mockRepo = new Mock<ITarefaRepository>();
 			mockRepo.Setup(r => r.BuscarPorId(It.IsAny<Guid>())).ReturnsAsync(tarefa);
 			mockRepo.Setup(r => r.BuscarPorDescricao("Original")).ReturnsAsync(tarefa);
-			var service = new TarefaService(mockRepo.Object);
+			var service = new TarefaService(mockRepo.Object, new Mock<IPessoaRepository>().Object, new Mock<IDespachanteEventos>().Object);
 
 			var dto = new TarefaUpdateDto { Descricao = "Original", Status = (char)StatusTarefa.Pendente };
 
@@ -147,7 +148,7 @@ namespace ListaDeTarefa.Test.Integration.Services
 			// Arrange
 			var mockRepo = new Mock<ITarefaRepository>();
 			mockRepo.Setup(r => r.BuscarPorId(It.IsAny<Guid>())).ReturnsAsync((Tarefa?)null);
-			var service = new TarefaService(mockRepo.Object);
+			var service = new TarefaService(mockRepo.Object, new Mock<IPessoaRepository>().Object, new Mock<IDespachanteEventos>().Object);
 
 			// Act & Assert
 			await Assert.ThrowsAsync<KeyNotFoundException>(() => service.Remover(Guid.NewGuid()));
@@ -161,7 +162,7 @@ namespace ListaDeTarefa.Test.Integration.Services
 			var mockRepo = new Mock<ITarefaRepository>();
 			mockRepo.Setup(r => r.BuscarPorId(It.IsAny<Guid>())).ReturnsAsync(tarefa);
 			mockRepo.Setup(r => r.Remover(tarefa)).Returns(Task.CompletedTask);
-			var service = new TarefaService(mockRepo.Object);
+			var service = new TarefaService(mockRepo.Object, new Mock<IPessoaRepository>().Object, new Mock<IDespachanteEventos>().Object);
 
 			// Act & Assert
 			await service.Remover(Guid.NewGuid());

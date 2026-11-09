@@ -9,6 +9,8 @@ namespace ListaDeTarefa.Infrastructure.Context
 	{
 		public DbSet<Tarefa> Tarefas { get; set; }
 		public DbSet<Pessoa> Pessoas { get; set; }
+		public DbSet<RelatorioSemanal> RelatoriosSemanais { get; set; }
+		public DbSet<EstatisticaTarefa> EstatisticasTarefa { get; set; }
 
 		protected override void OnModelCreating(ModelBuilder modelBuilder)
 		{

@@ -2,14 +2,17 @@
 using ListaDeTarefa.Application.Factories;
 using ListaDeTarefa.Application.Interfaces.IRepository;
 using ListaDeTarefa.Application.Interfaces.IService;
+using ListaDeTarefa.Application.Interfaces;
 using ListaDeTarefa.Domain.Enumerables;
 
 namespace ListaDeTarefa.Application.Services
 {
-	public class TarefaService(ITarefaRepository tarefaRepository) : ITarefaService
+	public class TarefaService(ITarefaRepository tarefaRepository, IPessoaRepository pessoaRepository, IDespachanteEventos despachanteEventos) : ITarefaService
 	{
 		#region Construtor
 		private readonly ITarefaRepository _tarefaRepository = tarefaRepository;
+		private readonly IPessoaRepository _pessoaRepository = pessoaRepository;
+		private readonly IDespachanteEventos _despachanteEventos = despachanteEventos;
 		#endregion Construtor
 
 		public async Task<TarefaDto?> BuscarPorDescricao(string descricao)
@@ -59,6 +62,28 @@ namespace ListaDeTarefa.Application.Services
 
 			TarefaFactory.UpdateDtoParaEntidade(tarefa, updateDto);
 			await _tarefaRepository.Atualizar(tarefa);
+
+			var eventos = tarefa.Eventos.ToList();
+			tarefa.LimparEventos();
+			await _despachanteEventos.DespacharAsync(eventos);
+		}
+
+		public async Task AtribuirPessoa(Guid tarefaId, Guid pessoaId)
+		{
+			var tarefa = await _tarefaRepository.BuscarPorId(tarefaId);
+			if (tarefa is null)
+				throw new KeyNotFoundException("Tarefa não encontrada.");
+
+			var pessoa = await _pessoaRepository.BuscarPorId(pessoaId);
+			if (pessoa is null)
+				throw new KeyNotFoundException("Pessoa não encontrada.");
+
+			tarefa.AtribuirPessoa(pessoa);
+			await _tarefaRepository.Atualizar(tarefa);
+
+			var eventos = tarefa.Eventos.ToList();
+			tarefa.LimparEventos();
+			await _despachanteEventos.DespacharAsync(eventos);
 		}
 
 		public async Task Remover(Guid id)

@@ -22,6 +22,38 @@ namespace ListaDeTarefa.Infrastructure.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
+            modelBuilder.Entity("ListaDeTarefa.Domain.Entities.EstatisticaTarefa", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTimeOffset?>("DataAtualizacao")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTimeOffset>("DataConclusao")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTimeOffset>("DataCriacao")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<double>("DuracaoEmMinutos")
+                        .HasColumnType("double precision");
+
+                    b.Property<Guid?>("PessoaId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("TarefaId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TarefaId")
+                        .IsUnique();
+
+                    b.ToTable("EstatisticasTarefa", (string)null);
+                });
+
             modelBuilder.Entity("ListaDeTarefa.Domain.Entities.Pessoa", b =>
                 {
                     b.Property<Guid>("Id")
@@ -70,6 +102,49 @@ namespace ListaDeTarefa.Infrastructure.Migrations
                     b.ToTable("Pessoas", (string)null);
                 });
 
+            modelBuilder.Entity("ListaDeTarefa.Domain.Entities.RelatorioSemanal", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTimeOffset?>("DataAtualizacao")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTimeOffset>("DataCriacao")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTimeOffset>("FimSemana")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTimeOffset>("InicioSemana")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<decimal>("TaxaConclusao")
+                        .HasPrecision(5, 2)
+                        .HasColumnType("numeric(5,2)");
+
+                    b.Property<decimal>("TempoMedioConclusaoHoras")
+                        .HasPrecision(12, 2)
+                        .HasColumnType("numeric(12,2)");
+
+                    b.Property<int>("TotalConcluidas")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("TotalCriadas")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("TotalPendentes")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("InicioSemana")
+                        .IsUnique();
+
+                    b.ToTable("RelatoriosSemanais", (string)null);
+                });
+
             modelBuilder.Entity("ListaDeTarefa.Domain.Entities.Tarefa", b =>
                 {
                     b.Property<Guid>("Id")
@@ -101,6 +176,15 @@ namespace ListaDeTarefa.Infrastructure.Migrations
                     b.HasIndex("PessoaId");
 
                     b.ToTable("Tarefas", (string)null);
+                });
+
+            modelBuilder.Entity("ListaDeTarefa.Domain.Entities.EstatisticaTarefa", b =>
+                {
+                    b.HasOne("ListaDeTarefa.Domain.Entities.Tarefa", null)
+                        .WithMany()
+                        .HasForeignKey("TarefaId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("ListaDeTarefa.Domain.Entities.Tarefa", b =>

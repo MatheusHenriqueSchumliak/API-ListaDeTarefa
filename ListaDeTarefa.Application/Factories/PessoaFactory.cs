@@ -1,5 +1,6 @@
 ﻿using ListaDeTarefa.Application.DTOs.Pessoa;
 using ListaDeTarefa.Domain.Entities;
+using ListaDeTarefa.Domain.Enumerables;
 
 namespace ListaDeTarefa.Application.Factories
 {
@@ -15,5 +16,8 @@ namespace ListaDeTarefa.Application.Factories
 			WhatsApp = pessoa.WhatsApp,
 			DataNascimento = pessoa.DataNascimento
 		};
+
+		public static Pessoa CreateDtoParaEntidade(PessoaCreateDto dto) =>
+			Pessoa.Criar(dto.Nome, dto.Sobrenome, dto.Email, dto.Telefone, dto.WhatsApp, dto.DataNascimento, TipoPessoa.Cliente);
 	}
 }

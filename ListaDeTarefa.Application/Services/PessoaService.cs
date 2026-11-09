@@ -1,6 +1,7 @@
 ﻿using ListaDeTarefa.Application.Interfaces.IRepository;
 using ListaDeTarefa.Application.Interfaces.IService;
 using ListaDeTarefa.Application.DTOs.Pessoa;
+using ListaDeTarefa.Application.Factories;
 
 namespace ListaDeTarefa.Application.Services
 {
@@ -10,14 +11,17 @@ namespace ListaDeTarefa.Application.Services
 		private readonly IPessoaRepository _pessoaRepository = pessoaRepository;
 		#endregion Construtor
 
-		public Task<PessoaDto> Adicionar(PessoaCreateDto createDto)
+		public async Task<PessoaDto> Adicionar(PessoaCreateDto createDto)
 		{
-			throw new NotImplementedException();
+			var pessoa = PessoaFactory.CreateDtoParaEntidade(createDto);
+			await _pessoaRepository.Adicionar(pessoa);
+			return PessoaFactory.EntidadeParaDto(pessoa);
 		}
 
-		public Task<PessoaDto?> BuscarPorId(Guid id)
+		public async Task<PessoaDto?> BuscarPorId(Guid id)
 		{
-			throw new NotImplementedException();
+			var pessoa = await _pessoaRepository.BuscarPorId(id);
+			return pessoa is null ? null : PessoaFactory.EntidadeParaDto(pessoa);
 		}
 
 		public Task<PessoaDto?> BuscarPorNome(string nome)

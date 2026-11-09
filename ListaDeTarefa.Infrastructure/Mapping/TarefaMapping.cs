@@ -13,6 +13,8 @@ namespace ListaDeTarefa.Infrastructure.Mapping
 
 			builder.HasKey(t => t.Id);
 
+			builder.Ignore(t => t.Eventos);
+
 			builder.Property(t => t.Descricao)
 				.IsRequired()
 				.HasMaxLength(255);

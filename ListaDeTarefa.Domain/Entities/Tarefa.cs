@@ -1,5 +1,6 @@
 ﻿using ListaDeTarefa.Domain.Entities.Base;
 using ListaDeTarefa.Domain.Enumerables;
+using ListaDeTarefa.Domain.Events;
 
 namespace ListaDeTarefa.Domain.Entities
 {
@@ -45,15 +46,18 @@ namespace ListaDeTarefa.Domain.Entities
 			Status = StatusTarefa.Concluido;
 			DataConclusao = DateTimeOffset.UtcNow;
 			DataAtualizacao = DateTimeOffset.UtcNow;
+
+			AdicionarEvento(new TarefaConcluidaEvento(Id, PessoaId, DataCriacao, DataConclusao.Value));
 		}
 
-		public void AtribuirPessoa(Pessoa pessoa)
-		{
+		public void AtribuirPessoa(Pessoa pessoa)		{
 			if (pessoa == null)
 				throw new ArgumentNullException(nameof(pessoa), "Pessoa não pode ser nula.");
 			Pessoa = pessoa;
 			PessoaId = pessoa.Id;
 			DataAtualizacao = DateTimeOffset.UtcNow;
+
+			AdicionarEvento(new TarefaAtribuidaEvento(Id, pessoa.Id, Descricao, DateTimeOffset.UtcNow));
 		}
 
 		public void RemoverPessoa()
